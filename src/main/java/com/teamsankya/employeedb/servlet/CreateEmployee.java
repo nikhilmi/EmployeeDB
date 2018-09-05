@@ -97,7 +97,7 @@ public class CreateEmployee extends HttpServlet {
 		 boolean b=	dao.createEmployee(mbean);
 		 
 		 req.setAttribute("b", b);
-		 req.getRequestDispatcher("/SearchResponse.jsp")
+		 req.getRequestDispatcher("/CreateStudentResponse.jsp")
 		 .forward(req, resp);
 	}
 
