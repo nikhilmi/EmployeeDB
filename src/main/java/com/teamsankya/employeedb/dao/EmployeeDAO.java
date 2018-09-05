@@ -6,7 +6,7 @@ import com.teamsankya.employeedb.dto.MasterBean;
 
 public interface EmployeeDAO 
 {
-	public void createEmployee(MasterBean mbean);
+	public boolean createEmployee(MasterBean mbean);
 
 	public void deleteEmployee(MasterBean mbean);
 

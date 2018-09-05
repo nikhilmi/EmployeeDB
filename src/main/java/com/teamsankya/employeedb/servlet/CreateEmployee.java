@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.teamsankya.employeedb.dao.EmployeeDAO;
 import com.teamsankya.employeedb.dto.EmployeeAddressBean;
 import com.teamsankya.employeedb.dto.EmployeeCareerPastBean;
@@ -20,10 +22,15 @@ import com.teamsankya.employeedb.util.EmployeeDAOFactory;
 @WebServlet("/CreateEmployee")
 public class CreateEmployee extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	final static Logger logger= Logger.getLogger(CreateEmployee.class);
+	
 	
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		logger.info("create employee started");
+		
 		
 		EmployeeInfoBean           eibean = new EmployeeInfoBean();
 		EmployeePersonalInfoBean   epibean=new EmployeePersonalInfoBean();
@@ -31,18 +38,20 @@ public class CreateEmployee extends HttpServlet {
 		EmployeeCareerCurrentBean eccbean=new EmployeeCareerCurrentBean();
 		EmployeeCareerPastBean     ecpbean=new EmployeeCareerPastBean();
 		
-		
+		logger.info(" For All bean classes, objects are created");
 		//---------------------employee info bean--------------------------
 		eibean.setEid(req.getParameter("eid"));
 		eibean.setFname(req.getParameter("fname"));
 		eibean.setLname(req.getParameter("lname"));
 		
+		logger.info("all fields are set from create employee page");
 		//---------------------employee personal info bean--------------------------
 		 
 		epibean.setContactNo(Long.parseLong(req.getParameter("contactno")));
 		epibean.setEmail(req.getParameter("email"));
 		epibean.setDob(req.getParameter("dob"));
 
+		logger.info("all fields are set from create employee page");
 		/*
 		 * String d=req.getParameter("DOB"); String res1=Test.ConvertDate(d);
 		 * java.sql.Date Date=java.sql.Date.valueOf(res1);
@@ -59,16 +68,17 @@ public class CreateEmployee extends HttpServlet {
 		eabean.setPincode(Integer.parseInt(req.getParameter("pincode")));
 		eabean.setCity(req.getParameter("city"));
 		
+		logger.info("all fields are set from create employee page");
 		//---------------------employee career current bean--------------------------
 		eccbean.setJoinDate(req.getParameter("joindate"));
 		eccbean.setDesignation(req.getParameter("designation"));
 		eccbean.setCTC(Float.parseFloat(req.getParameter("ctc")));
 		
+		logger.info("all fields are set from create employee page");
 		//---------------------employee career past--------------------------
 		ecpbean.setExperience(Integer.parseInt(req.getParameter("experience")));
 		ecpbean.setLastCompanyName(req.getParameter("lastcompanyname"));
-		
-		
+		logger.info("all fields are set from create employee page");
 		//--------------------------------------------------------------------------
 		MasterBean mbean=new MasterBean();
 		
@@ -78,15 +88,17 @@ public class CreateEmployee extends HttpServlet {
 		mbean.setEccbean(eccbean);
 		mbean.setEcpbean(ecpbean);
 		
+		logger.info("passing masterbean objects for all the bean claases ");
 		//-------------------------------------------------------------------
 
 		EmployeeDAO dao = EmployeeDAOFactory.getEmployeeDAOInstance();
-		dao.createEmployee(mbean);
-
-		// boolean b;
-		// req.setAttribute("bean", bean);
-		// req.getRequestDispatcher("/SearchResponse.jsp")
-		// .forward(req, resp);
+	
+		
+		 boolean b=	dao.createEmployee(mbean);
+		 
+		 req.setAttribute("b", b);
+		 req.getRequestDispatcher("/SearchResponse.jsp")
+		 .forward(req, resp);
 	}
 
 }

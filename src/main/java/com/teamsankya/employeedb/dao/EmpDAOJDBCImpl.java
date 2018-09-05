@@ -7,15 +7,18 @@ import com.teamsankya.employeedb.dto.EmployeeInfoBean;
 import com.teamsankya.employeedb.dto.EmployeePersonalInfoBean;
 import com.teamsankya.employeedb.dto.EmployeeCareerCurrentBean;
 import com.teamsankya.employeedb.dto.MasterBean;
+import com.teamsankya.employeedb.servlet.SearchEmployee;
 
 import java.sql.*;
 
+import org.apache.log4j.Logger;
+
 public class EmpDAOJDBCImpl implements EmployeeDAO {
 
-	
+	final static Logger logger= Logger.getLogger(EmpDAOJDBCImpl.class);
 	@Override
 	public MasterBean searchEmployee(String eid, int k) {
-
+		logger.info("searchEmployee  started");
 		String dbUrl3 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql1 = "select * from employee_info where eid=?";
 		String sql2 = "select * from employee_personal_info where eid=?";
@@ -93,19 +96,21 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 				mbean.setEabean(eabean);
 				mbean.setEccbean(eccbean);
 				mbean.setEcpbean(ecpbean);
+				logger.info("searchEmployee  successfully executed");
 				return mbean;
-
+				
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+			
 		}
-
 	}
 
 	@Override
 	public EmployeeInfoBean searchEmployee(String fname) {
+		logger.info("searchEmployee  started");
 		String dbUrl4 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql4 = "select * from employee where fname=?";
 		try {
@@ -130,6 +135,7 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 						 * bean.setLastCompanyName(rs.getString("LastCompanyName"));
 						 * bean.setCTC(rs.getFloat("CTC"));
 						 */
+						logger.info("searchEmployee successfully executed");
 						return bean;
 					} else {
 						return null;
@@ -144,8 +150,8 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 	}
 
 	@Override
-	public void createEmployee(MasterBean mbean) {
-
+	public boolean createEmployee(MasterBean mbean) {
+		logger.info("createEmployee  started");
 		String dbUrl1 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql1 = "insert into employee_info values(?,?,?)";
 		String sql2 = "insert into employee_personal_info values(?,?,?,?)";
@@ -198,20 +204,20 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 				System.out.println("Emplyee career current inserted...");
 				pstmt5.execute();
 				System.out.println("Emplyee current past inserted...");
-				// boolean b=pstmt1.execute();
-				// if(b)
+				 boolean b=pstmt1.execute();
+				
 				System.out.println("Data inserted...");
-				// return true;
+				 return true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
-
 	}
 
 	@Override
 	public void deleteEmployee(MasterBean mbean) {
-
+		logger.info("deleteEmployee  started");
 		String dbUrl2 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql1 = "delete from employee_info where eid=?";
 		String sql2 = "delete from employee_personal_info where eid=?";
@@ -259,12 +265,12 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		logger.info("deleteEmployee successfully executed");
 	}
 
 	@Override
 	public void updateEmployee(MasterBean mbean) {
-
+		logger.info("updateEmployee  started");
 		try {
 			Driver driver = new Driver();
 			DriverManager.registerDriver(driver);
@@ -327,6 +333,7 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		logger.info("updateEmployee successfully executed");
 	}
 
 }
