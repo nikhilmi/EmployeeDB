@@ -9,9 +9,10 @@ public class DeleteEmployeeTest {
 	@Test
 	public void deleteEmployee() {
 		EmpDAOJDBCImpl emp= new EmpDAOJDBCImpl();
-		emp.deleteEmployee();
+		
+		//emp.deleteEmployee();
 			
 		}
 		
 	}
-}
+

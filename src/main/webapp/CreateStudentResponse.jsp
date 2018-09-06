@@ -6,7 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<%request.getAttribute("b"); %>
 <body>
-data inserted success....
+<h1>data inserted success....</h1><br><br><br><br>
+<a href="./Adminpage.html">CLICK HERE :TO RETURN TO HOMEPAGE</a><br><br>
+<a href="./Add_Emp.html">CLICK HERE :TO ADD ANOTHER EMPLOYEE </a>
 </body>
 </html>

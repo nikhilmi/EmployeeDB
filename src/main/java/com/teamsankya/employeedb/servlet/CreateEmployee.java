@@ -94,9 +94,9 @@ public class CreateEmployee extends HttpServlet {
 		EmployeeDAO dao = EmployeeDAOFactory.getEmployeeDAOInstance();
 	
 		
-		 boolean b=	dao.createEmployee(mbean);
+		 String eid=	dao.createEmployee(mbean);
 		 
-		 req.setAttribute("b", b);
+		 req.setAttribute("eid", eid);
 		 req.getRequestDispatcher("/CreateStudentResponse.jsp")
 		 .forward(req, resp);
 	}

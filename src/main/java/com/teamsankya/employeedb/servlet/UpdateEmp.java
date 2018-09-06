@@ -72,8 +72,10 @@ public class UpdateEmp extends HttpServlet {
 		
 		EmployeeDAO dao=EmployeeDAOFactory.getEmployeeDAOInstance();
 		
-		dao.updateEmployee(mbean);
+		String eid=dao.updateEmployee(mbean);
 		
+		req.setAttribute("eid", eid);
+		req.getRequestDispatcher("./UpdateEmployeeResponse.jsp").forward(req, resp);
 		//req.getRequestDispatcher("UpdateStudentResponse.jsp").forward(req, resp);
 	
 	}

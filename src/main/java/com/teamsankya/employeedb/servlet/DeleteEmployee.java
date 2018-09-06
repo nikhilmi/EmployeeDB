@@ -35,8 +35,11 @@ public class DeleteEmployee extends HttpServlet {
 		logger.info("pass masterbean object");
 		//--------------------------------------------------------------------------		
 		EmployeeDAO dao=EmployeeDAOFactory.getEmployeeDAOInstance();
-		dao.deleteEmployee(mbean);
-	
+		String eid=dao.deleteEmployee(mbean);
+		
+		req.setAttribute("eid", eid);
+		 req.getRequestDispatcher("/DeleteEmployeeResponse.jsp")
+		 .forward(req, resp);
 		
 	}
 

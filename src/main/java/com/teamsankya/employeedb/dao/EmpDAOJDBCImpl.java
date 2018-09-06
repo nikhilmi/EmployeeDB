@@ -7,9 +7,8 @@ import com.teamsankya.employeedb.dto.EmployeeInfoBean;
 import com.teamsankya.employeedb.dto.EmployeePersonalInfoBean;
 import com.teamsankya.employeedb.dto.EmployeeCareerCurrentBean;
 import com.teamsankya.employeedb.dto.MasterBean;
-import com.teamsankya.employeedb.servlet.SearchEmployee;
-
 import java.sql.*;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -150,7 +149,7 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 	}
 
 	@Override
-	public boolean createEmployee(MasterBean mbean) {
+	public String createEmployee(MasterBean mbean) {
 		logger.info("createEmployee  started");
 		String dbUrl1 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql1 = "insert into employee_info values(?,?,?)";
@@ -170,26 +169,50 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 					PreparedStatement pstmt4 = con.prepareStatement(sql4);
 					PreparedStatement pstmt5 = con.prepareStatement(sql5)) {
 				System.out.println("Setting values to insert into db...");
-				pstmt1.setString(1, mbean.getEibean().getEid());
+				
+				
+				
+				
+				char[] ch = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+				        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+				        'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+				        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+				        'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+				        'w', 'x', 'y', 'z' };
+				    
+					String res="";
+				    char[] c=new char[8];
+				    Random random=new Random();
+				    for (int i = 0; i < 8; i++) {
+				      c[i]=ch[random.nextInt(ch.length)];
+				      res=res+c[i];
+				    }  
+				    
+				
+				
+				
+				
+				
+				pstmt1.setString(1, new String(c));
 				pstmt1.setString(2, mbean.getEibean().getFname());
 				pstmt1.setString(3, mbean.getEibean().getLname());
 
-				pstmt2.setString(1, mbean.getEibean().getEid());
+				pstmt2.setString(1,  new String(c));
 				pstmt2.setLong(2, mbean.getEpibean().getContactNo());
 				pstmt2.setString(3, mbean.getEpibean().getEmail());
 				pstmt2.setString(4, mbean.getEpibean().getDob());
 
-				pstmt3.setString(1, mbean.getEibean().getEid());
+				pstmt3.setString(1,  new String(c));
 				pstmt3.setString(2, mbean.getEabean().getAddress());
 				pstmt3.setInt(3, mbean.getEabean().getPincode());
 				pstmt3.setString(4, mbean.getEabean().getCity());
 
-				pstmt4.setString(1, mbean.getEibean().getEid());
+				pstmt4.setString(1,  new String(c));
 				pstmt4.setString(2, mbean.getEccbean().getJoinDate());
 				pstmt4.setFloat(3, mbean.getEccbean().getCTC());
 				pstmt4.setString(4, mbean.getEccbean().getDesignation());
 
-				pstmt5.setString(1, mbean.getEibean().getEid());
+				pstmt5.setString(1,  new String(c));
 				pstmt5.setInt(2, mbean.getEcpbean().getExperience());
 				pstmt5.setString(3, mbean.getEcpbean().getLastCompanyName());
 
@@ -204,19 +227,19 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 				System.out.println("Emplyee career current inserted...");
 				pstmt5.execute();
 				System.out.println("Emplyee current past inserted...");
-				 boolean b=pstmt1.execute();
+				 //boolean b=pstmt1.execute();
 				
 				System.out.println("Data inserted...");
-				 return true;
+				 return res;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 	}
 
 	@Override
-	public void deleteEmployee(MasterBean mbean) {
+	public String deleteEmployee(MasterBean mbean) {
 		logger.info("deleteEmployee  started");
 		String dbUrl2 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql1 = "delete from employee_info where eid=?";
@@ -236,9 +259,12 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 					PreparedStatement pstmt4 = con.prepareStatement(sql4);
 					PreparedStatement pstmt5 = con.prepareStatement(sql5)) {
 				System.out.println("Setting values to delete from db...");
+				
 				pstmt1.setString(1, mbean.getEibean().getEid());
-
-				System.out.println(mbean.getEibean().getEid());
+				
+				String del_res=mbean.getEibean().getEid();
+				
+				//System.out.println(mbean.getEibean().getEid());
 
 				pstmt2.setString(1, mbean.getEibean().getEid());
 
@@ -261,15 +287,17 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 				System.out.println("Executing Employe  career past delete command...");
 
 				System.out.println("Data deleted...");
+				return del_res;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		logger.info("deleteEmployee successfully executed");
+		return null;
 	}
 
 	@Override
-	public void updateEmployee(MasterBean mbean) {
+	public String updateEmployee(MasterBean mbean) {
 		logger.info("updateEmployee  started");
 		try {
 			Driver driver = new Driver();
@@ -295,6 +323,9 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 
 			{
 				pstmt1.setString(1, mbean.getEibean().getFname());
+				
+				String update_res=mbean.getEibean().getFname();
+				
 				pstmt1.setString(2, mbean.getEibean().getLname());
 				pstmt1.setString(3, mbean.getEibean().getEid());
 
@@ -328,12 +359,17 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 
 				pstmt5.execute();
 				System.out.println("Data Updated.....");
+				
+				return update_res;
 				// boolean b=pstmt.execute();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 		logger.info("updateEmployee successfully executed");
+		
+		return null;
 	}
 
 }
