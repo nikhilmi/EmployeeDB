@@ -1,6 +1,9 @@
 package com.teamsankya.employeedb.servlet;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,10 +28,18 @@ public class SearchEmployee extends HttpServlet {
 		MasterBean mbean=new MasterBean();
 		logger.info("field are set");
 		
-		String eid = req.getParameter("eid");
-			EmployeeDAO dao = EmployeeDAOFactory.getEmployeeDAOInstance();
+			String eid=req.getParameter("eid");
+			
+		 	EmployeeDAO dao = EmployeeDAOFactory.getEmployeeDAOInstance();
 			
 			mbean= dao.searchEmployee(eid,4);
+		 	
+		
+		
+		
+		
+		//String eid = req.getParameter("eid");
+			
 			logger.info("response taken from dao implementation");
 			//System.out.println(mbean.getEabean().getCity());
 				req.setAttribute("mbean", mbean);

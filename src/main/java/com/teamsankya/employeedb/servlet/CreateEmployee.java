@@ -19,6 +19,7 @@ import com.teamsankya.employeedb.dto.EmployeeCareerCurrentBean;
 import com.teamsankya.employeedb.dto.MasterBean;
 import com.teamsankya.employeedb.util.EmployeeDAOFactory;
 
+
 @WebServlet("/CreateEmployee")
 public class CreateEmployee extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -40,7 +41,7 @@ public class CreateEmployee extends HttpServlet {
 		
 		logger.info(" For All bean classes, objects are created");
 		//---------------------employee info bean--------------------------
-		eibean.setEid(req.getParameter("eid"));
+		//eibean.setEid(req.getParameter("eid"));
 		eibean.setFname(req.getParameter("fname"));
 		eibean.setLname(req.getParameter("lname"));
 		
@@ -95,10 +96,14 @@ public class CreateEmployee extends HttpServlet {
 	
 		
 		 String eid=	dao.createEmployee(mbean);
-		 
+		 //String email=	dao.createEmployee(mbean);
+	//	 String e= req.getAttribute(mbean.)
+		// sendEmail(email);
 		 req.setAttribute("eid", eid);
-		 req.getRequestDispatcher("/CreateStudentResponse.jsp")
+		 req.getRequestDispatcher("/CreateEmployeeResponse.jsp")
 		 .forward(req, resp);
 	}
+
+
 
 }

@@ -7,6 +7,8 @@ import com.teamsankya.employeedb.dto.EmployeeInfoBean;
 import com.teamsankya.employeedb.dto.EmployeePersonalInfoBean;
 import com.teamsankya.employeedb.dto.EmployeeCareerCurrentBean;
 import com.teamsankya.employeedb.dto.MasterBean;
+import com.teamsankya.employeedb.servlet.SendEmailAttachment;
+
 import java.sql.*;
 import java.util.Random;
 
@@ -108,8 +110,99 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 	}
 
 	@Override
-	public EmployeeInfoBean searchEmployee(String fname) {
+	public MasterBean searchEmployee(String fname) {
 		logger.info("searchEmployee  started");
+		
+		String dbUrl3 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
+		String sql1 = "select * from employee_info where fname=?";
+		String sql2 = "select * from employee_personal_info where fname=?";
+		String sql3 = "select * from employee_address where fname=?";
+		String sql4 = "select * from employee_career_current where fname=?";
+		String sql5 = "select * from employee_career_past where fname=?";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("Creating JDBC objects");
+			try (Connection con = DriverManager.getConnection(dbUrl3);
+					PreparedStatement pstmt1 = con.prepareStatement(sql1);
+					PreparedStatement pstmt2 = con.prepareStatement(sql2);
+					PreparedStatement pstmt3 = con.prepareStatement(sql3);
+					PreparedStatement pstmt4 = con.prepareStatement(sql4);
+					PreparedStatement pstmt5 = con.prepareStatement(sql5);
+
+			) {
+
+				pstmt1.setString(1, fname);
+				pstmt2.setString(1, fname);
+				pstmt3.setString(1, fname);
+				pstmt4.setString(1, fname);
+				pstmt5.setString(1, fname);
+
+				ResultSet rs1 = pstmt1.executeQuery();
+
+				ResultSet rs2 = pstmt2.executeQuery();
+
+				ResultSet rs3 = pstmt3.executeQuery();
+
+				ResultSet rs4 = pstmt4.executeQuery();
+
+				ResultSet rs5 = pstmt5.executeQuery();
+
+				EmployeeCareerPastBean ecpbean = new EmployeeCareerPastBean();
+				EmployeeInfoBean eibean = new EmployeeInfoBean();
+				EmployeeAddressBean eabean = new EmployeeAddressBean();
+				EmployeePersonalInfoBean epibean = new EmployeePersonalInfoBean();
+				EmployeeCareerCurrentBean eccbean = new EmployeeCareerCurrentBean();
+
+				if (rs1.next()) {
+					eibean.setEid(rs1.getString("eid"));
+					eibean.setFname(rs1.getString("fname"));
+					eibean.setLname(rs1.getString("lname"));
+				}
+				if (rs2.next()) {
+
+					epibean.setContactNo(rs2.getLong("contactNo"));
+					epibean.setEmail(rs2.getString("email"));
+					epibean.setDob(rs2.getString("dob"));
+				}
+				if (rs3.next()) {
+
+					eabean.setAddress(rs3.getString("address"));
+					eabean.setPincode(rs3.getInt("pincode"));
+					eabean.setCity(rs3.getString("city"));
+					System.out.println(rs3.getString("city"));
+				}
+				if (rs4.next()) {
+
+					eccbean.setJoinDate(rs4.getString("joindate"));
+					eccbean.setCTC(rs4.getFloat("ctc"));
+					eccbean.setDesignation(rs4.getString("designation"));
+				}
+				if (rs5.next()) {
+
+					ecpbean.setExperience(rs5.getInt("experience"));
+					ecpbean.setLastCompanyName(rs5.getString("lastcompanyname"));
+				}
+
+				MasterBean mbean = new MasterBean();
+				mbean.setEibean(eibean);
+				mbean.setEpibean(epibean);
+				mbean.setEabean(eabean);
+				mbean.setEccbean(eccbean);
+				mbean.setEcpbean(ecpbean);
+				logger.info("searchEmployee  successfully executed");
+				return mbean;
+				
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+			
+		}
+		
+		
+		/*
 		String dbUrl4 = "jdbc:mysql://localhost:3306/employee?user=root&password=admin";
 		String sql4 = "select * from employee where fname=?";
 		try {
@@ -133,9 +226,9 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 						 * bean.setExperience(rs.getInt("Experience"));
 						 * bean.setLastCompanyName(rs.getString("LastCompanyName"));
 						 * bean.setCTC(rs.getFloat("CTC"));
-						 */
+						 
 						logger.info("searchEmployee successfully executed");
-						return bean;
+						return mbean;
 					} else {
 						return null;
 					}
@@ -145,6 +238,7 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 			e.printStackTrace();
 			return null;
 		}
+		*/
 
 	}
 
@@ -230,7 +324,12 @@ public class EmpDAOJDBCImpl implements EmployeeDAO {
 				 //boolean b=pstmt1.execute();
 				
 				System.out.println("Data inserted...");
+				String email= mbean.getEpibean().getEmail();
+			
+				SendEmailAttachment send=new SendEmailAttachment();
+				send.sendEmail(email); 
 				 return res;
+				 //return email;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

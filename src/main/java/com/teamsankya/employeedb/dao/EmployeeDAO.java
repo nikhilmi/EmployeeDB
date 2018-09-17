@@ -12,7 +12,7 @@ public interface EmployeeDAO
 
 	public MasterBean searchEmployee(String eid,int k);
 
-	public EmployeeInfoBean searchEmployee(String fname);
+	public  MasterBean searchEmployee(String fname);
 	
 	public String updateEmployee(MasterBean mbean);
 }

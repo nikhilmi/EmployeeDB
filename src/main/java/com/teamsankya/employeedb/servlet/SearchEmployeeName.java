@@ -26,7 +26,7 @@ public class SearchEmployeeName extends HttpServlet {
 		logger.info("field are set");
 		
 		EmployeeDAO dao = EmployeeDAOFactory.getEmployeeDAOInstance();
-		bean = dao.searchEmployee(fname);
+		//bean = dao.searchEmployee(fname);
 		req.setAttribute("bean", bean);
 		logger.info("forward to response page");
 		req.getRequestDispatcher("/SearchResponse.jsp")
